@@ -1,0 +1,36 @@
+create database owncloud;
+CREATE USER 'admin'@'%' IDENTIFIED BY 'own';
+GRANT ALL PRIVILEGES ON owncloud.* TO 'admin'@'%';
+FLUSH PRIVILEGES;
+
+docker network create -d bridge --subnet 10.10.0.0/24 --gateway 10.10.0.254 lamp &&
+docker run -dt  --name db_master2 --hostname db_master2 --volume /media/oliveira/21B6AAC4765F581B1/teste_banco/db_master:/var/lib/mysql --network lamp matheus2411/db_master:v2 &&
+docker run -dt  --name db_slave2 --hostname db_slave2 --volume /media/oliveira/21B6AAC4765F581B1/teste_banco/db_slave:/var/lib/mysql --network lamp matheus2411/db_slave &&
+docker run -dt  --name web1 --hostname web1 --network lamp -v /media/oliveira/21B6AAC4765F581B1/teste_banco/www:/var/www/html --expose 80 matheus2411/web1 &&
+docker run -dt  --name web2 --hostname web2 --network lamp -v /media/oliveira/21B6AAC4765F581B1/teste_banco/www:/var/www/html --expose 80 matheus2411/web1 &&
+docker run -dt  --name web3 --hostname web3 --network lamp -v /media/oliveira/21B6AAC4765F581B1/teste_banco/www:/var/www/html --expose 80 matheus2411/web1 &&
+docker run -dt  --name web4 --hostname web4 --network lamp -v /media/oliveira/21B6AAC4765F581B1/teste_banco/www:/var/www/html --expose 80 matheus2411/web1 &&
+docker run -dt  --name haproxy --hostname haproxy --network lamp --expose 80 --expose 80/udp matheus2411/haproxy &&
+docker exec -it web1 service apache2 start &&
+docker exec -it web2 service apache2 start &&
+docker exec -it web3 service apache2 start &&
+docker exec -it web2 service apache2 start &&
+docker exec -it haproxy service haproxy start &&
+docker ps &&
+docker images
+
+
+docker run -dt  --name dns --hostname dns --network lamp --expose 53 --expose 53/udp debian
+
+docker stop owncloud &&
+docker rm owncloud
+
+docker run --name owncloud --hostname owncloud --expose 6379 --expose 80 --expose 443 --expose 9980 -dt --network lamp -v /var/www/html/owncloud:/var/www/html -v /var/lib/mysql:/var/lib/mysql  matheus2411/owncloud
+
+apt-get install procps
+
+docker run -dt  --name web3 --hostname web3 --network lamp --expose 80 matheus2411/web1 &&
+docker run -dt  --name web4 --hostname web4 --network lamp --expose 80 matheus2411/web1
+
+docker exec -it web3 service apache2 start &&
+docker exec -it web4 service apache2 start

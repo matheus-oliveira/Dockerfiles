@@ -1,3 +1,5 @@
+manteiner Matheus Oliveira Guedes
+
 create database owncloud;
 CREATE USER 'admin'@'%' IDENTIFIED BY 'own';
 GRANT ALL PRIVILEGES ON owncloud.* TO 'admin'@'%';

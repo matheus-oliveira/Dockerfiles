@@ -1,5 +1,10 @@
 manteiner Matheus Oliveira Guedes
 
+git config --global user.email "moguedes98@gmail.com"
+  git config --global user.name "Matheus Oliveira Guedes"
+
+q#Rk-/17#)DE
+
 create database owncloud;
 CREATE USER 'admin'@'%' IDENTIFIED BY 'own';
 GRANT ALL PRIVILEGES ON owncloud.* TO 'admin'@'%';
